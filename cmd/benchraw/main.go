@@ -22,18 +22,14 @@ import (
 	"sync"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql"
-
 	"github.com/ngaut/log"
-	"github.com/pingcap/tidb/kv"
 	"github.com/pingcap/tidb/store/tikv"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
 var (
-	store     kv.Storage
 	dataCnt   = flag.Int("N", 1000000, "data num")
-	workerCnt = flag.Int("C", 400, "concurrent num")
+	workerCnt = flag.Int("C", 100, "concurrent num")
 	pdAddr    = flag.String("pd", "localhost:2379", "pd address:localhost:2379")
 	valueSize = flag.Int("V", 5, "value size in byte")
 
@@ -105,7 +101,7 @@ func batchRawPut(value []byte) {
 
 func main() {
 	flag.Parse()
-	log.SetLevelByString("error")
+	log.SetLevelByString("warn")
 	Init()
 
 	value := make([]byte, *valueSize)
